@@ -1,12 +1,12 @@
 #!/bin/bash
-# 使用官方镜像安装 php + apache
+# 使用官方镜像创建 php + apache 容器
 
 #创建宿主机用于保存配置文件的目录
 BASE_PATH=~/docker
 if [ -d ${BASE_PATH}/php-apache ]; then
 	rm -rf ${BASE_PATH}/php-apache
 fi
-mkdir -p ${BASE_PATH}/php-apache/apache2/conf ${BASE_PATH}/php-apache/apache2/logs ${BASE_PATH}/php-apache/php
+mkdir -p ${BASE_PATH}/php-apache/apache2/conf ${BASE_PATH}/php-apache/apache2/logs
 
 #设置配置文件保存到宿主机的目录
 APACHE_DIR=${BASE_PATH}/php-apache/apache2
@@ -32,6 +32,9 @@ docker cp ${CONTAINER}:/etc/apache2/mods-enabled ${APACHE_CONF_DIR}/mods-enabled
 docker cp ${CONTAINER}:/etc/apache2/conf-enabled ${APACHE_CONF_DIR}/conf-enabled
 docker stop ${CONTAINER}
 docker rm ${CONTAINER}
+
+#创建php.ini
+cp ${PHP_DIR}/php.ini-development ${PHP_DIR}/my.ini
 
 #创建apache虚拟主机配置文件
 mkdir ${APACHE_CONF_DIR}/sites-enabled
